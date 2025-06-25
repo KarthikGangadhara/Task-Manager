@@ -1,0 +1,96 @@
+<div class="ui container fluid">
+
+  <!-- Add/Edit Toggle Button -->
+  
+   <div class="ui grid">
+    <div class="sixteen wide column right aligned">
+       <button (click)="openAddForm()" class="ui primary icon button">
+  <i *ngIf="showTaskForm" class="close icon"></i>
+  <i *ngIf="!showTaskForm" class="plus icon"></i>
+  {{ showTaskForm ? '' : 'Add Task' }}
+</button>
+      <button (click)="logOut()" class="ui primary button">
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- Add/Edit Task Form -->
+  <div *ngIf="showTaskForm" class="ui segment">
+    <form class="ui form" (ngSubmit)="submitTask()" #taskForm="ngForm">
+
+      <div class="two fields">
+        <div class="field">
+          <label>Task Name</label>
+          <input type="text" [(ngModel)]="formTask.task_name" name="task_name" required>
+        </div>
+        <div class="field">
+          <label>Assigned To (User ID)</label>
+          <input type="number" [(ngModel)]="formTask.assigned_to" name="assigned_to">
+        </div>
+      </div>
+
+      <div class="two fields">
+        <div class="field">
+          <label>Last Date</label>
+          <input type="date" [(ngModel)]="formTask.last_date" name="last_date">
+        </div>
+        <div *ngIf="isEditMode" class="field">
+          <label>Status</label>
+          <input type="text" [(ngModel)]="formTask.status" name="status">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Task Description</label>
+        <textarea [(ngModel)]="formTask.task_description" name="task_description"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Attachment</label>
+        <input type="file" [(ngModel)]="formTask.attachments" name="attachments">
+      </div>
+
+      <button type="submit" class="ui green button">
+        {{ isEditMode ? 'Update Task' : 'Save Task' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Task List Table -->
+  <table class="ui red small table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Task Name</th>
+        <th>Assigned To</th>
+        <th>Task Description</th>
+        <th>Status</th>
+        <th>Assigned On</th>
+        <th>Last Date</th>
+        <th>Created On</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.id }}</td>
+        <td>{{ task.task_name }}</td>
+        <td>{{ task.assigned_to }}</td>
+        <td>{{ task.task_description }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.assigned_on ? (task.assigned_on | date) : 'N/A' }}</td>
+        <td>{{ task.last_date ? (task.last_date | date) : 'N/A' }}</td>
+        <td>{{ task.created_on ? (task.created_on | date) : 'N/A' }}</td>
+        <td>
+          <button class="ui icon blue button" (click)="onEdit(task)">
+            <i class="edit icon"></i>
+          </button>
+          <button class="ui icon orange button" (click)="onAssign(task)">
+            <i class="user plus icon"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
